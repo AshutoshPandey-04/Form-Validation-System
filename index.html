@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Validation System</title>
+<style>
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Georgia, 'Times New Roman', Times, serif, sans-serif;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #FF7F00, #000000, #D22222, #FFD700, #8B0000);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select, button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+button {
+  background-color: #FFD700;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #D22222;
+}
+
+#error {
+  color: #D22222;
+  margin-top: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="number"] {
+  width: calc(100% - 20px);
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #FFD700;
+}
+
+input:invalid {
+  border-color: #D22222;
+}
+
+input:invalid:focus {
+  border-color: #D22222;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.custom-checkbox input {
+  width: auto;
+  margin-right: 10px;
+}
+
+#passwordStrength {
+  margin-bottom: 10px;
+}
+
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+.step-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
+</head>
+<body>
+<div class="background"></div>
+<div class="container">
+  <h1>Form Validation System</h1>
+  <form id="myForm">
+    <div class="step active">
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+      </div>
+      <div class="form-group">
+        <label for="middleName">Middle Name:</label>
+        <input type="text" id="middleName" name="middleName">
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+    </div>
+    <div class="step">
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <div id="passwordStrength"></div>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+      </div>
+    </div>
+    <div class="step">
+      <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+      </div>
+      <div class="form-group">
+        <label for="creditCard">Credit Card Number:</label>
+        <input type="number" id="creditCard" name="creditCard" required>
+      </div>
+    </div>
+    <div class="step">
+      <div class="form-group">
+        <label for="courseType">Course Type:</label>
+        <select id="courseType" name="courseType" required>
+          <option value="">Select Course Type</option>
+          <option value="undergraduate">Undergraduate</option>
+          <option value="graduate">Graduate</option>
+          <option value="postgraduate">Postgraduate</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="course">Course:</label>
+        <select id="course" name="course" required>
+          <option value="">Select Course</option>
+        </select>
+      </div>
+    </div>
+    <div class="step">
+      <div class="form-group">
+        <label for="search">Dynamic Search:</label>
+        <input type="text" id="search" placeholder="Search...">
+        <ul id="searchResults"></ul>
+      </div>
+      <div class="form-group custom-checkbox">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">I agree to the terms and conditions</label>
+      </div>
+      <button type="submit">Submit</button>
+    </div>
+    <div class="step-buttons">
+      <button type="button" id="prevBtn">Previous</button>
+      <button type="button" id="nextBtn">Next</button>
+    </div>
+  </form>
+  <div id="output"></div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('myForm');
+  const output = document.getElementById('output');
+  const courseTypeSelect = document.getElementById('courseType');
+  const courseSelect = document.getElementById('course');
+  const passwordInput = document.getElementById('password');
+  const passwordStrength = document.getElementById('passwordStrength');
+  const steps = document.querySelectorAll('.step');
+  let currentStep = 0;
+
+  const courses = {
+    undergraduate: [
+      { name: 'B.Sc Computer Science', maxCapacity: 60, duration: '3 years', fee: '$3000 per year' },
+      { name: 'B.A. Economics', maxCapacity: 50, duration: '3 years', fee: '$2500 per year' },
+      { name: 'B.Com', maxCapacity: 70, duration: '3 years', fee: '$2800 per year' }
+    ],
+    graduate: [
+      { name: 'M.Sc Computer Science', maxCapacity: 30, duration: '2 years', fee: '$4000 per year' },
+      { name: 'M.A. Economics', maxCapacity: 25, duration: '2 years', fee: '$3500 per year' },
+      { name: 'MBA', maxCapacity: 40, duration: '2 years', fee: '$5000 per year' }
+    ],
+    postgraduate: [
+      { name: 'PhD Computer Science', maxCapacity: 10, duration: '4 years', fee: '$6000 per year' },
+      { name: 'PhD Economics', maxCapacity: 10, duration: '4 years', fee: '$5500 per year' },
+      { name: 'PhD Management', maxCapacity: 15, duration: '4 years', fee: '$6000 per year' }
+    ]
+  };
+
+  courseTypeSelect.addEventListener('change', function () {
+    const courseType = this.value;
+    const courseOptions = courses[courseType] || [];
+    courseSelect.innerHTML = '<option value="">Select Course</option>';
+    courseOptions.forEach(course => {
+      const option = document.createElement('option');
+      option.value = course.name;
+      option.textContent = `${course.name} - ${course.maxCapacity} seats - ${course.duration} - ${course.fee}`;
+      courseSelect.appendChild(option);
+    });
+  });
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const firstName = document.getElementById('firstName').value.trim();
+    const middleName = document.getElementById('middleName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = passwordInput.value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    const dob = document.getElementById('dob').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const creditCard = document.getElementById('creditCard').value.trim();
+    const courseType = courseTypeSelect.value;
+    const course = courseSelect.value;
+    const terms = document.getElementById('terms').checked;
+
+    if (
+      firstName === '' ||
+      lastName === '' ||
+      email === '' ||
+      password === '' ||
+      confirmPassword === '' ||
+      dob === '' ||
+      phone === '' ||
+      creditCard === '' ||
+      courseType === '' ||
+      course === '' ||
+      !terms ||
+      phone === '1234567890' ||
+      password === 'password' ||
+      password.length < 6 ||
+      password === firstName ||
+      password === lastName
+    ) {
+      showError('Please enter correct information.');
+    } else if (password !== confirmPassword) {
+      showError('Passwords do not match.');
+    } else {
+
+      localStorage.setItem('firstName', firstName);
+      localStorage.setItem('middleName', middleName);
+      localStorage.setItem('lastName', lastName);
+      localStorage.setItem('email', email);
+      localStorage.setItem('dob', dob);
+      localStorage.setItem('phone', phone);
+      localStorage.setItem('creditCard', creditCard);
+      localStorage.setItem('courseType', courseType);
+      localStorage.setItem('course', course);
+      showSuccess('Form submitted successfully!');
+      form.reset();
+    }
+  });
+
+  function showError(message) {
+    output.innerHTML = `<p id="error" role="alert">${message}</p>`;
+  }
+
+  function showSuccess(message) {
+    output.innerHTML = `<p>${message}</p>`;
+  }
+
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('input', function() {
+      if (this.validity.valid) {
+        this.classList.remove('invalid');
+        output.innerHTML = '';
+      } else {
+        this.classList.add('invalid');
+        showError(this.validationMessage);
+      }
+    });
+  });
+
+  passwordInput.addEventListener('input', function() {
+    const value = this.value;
+    let strength = 0;
+    if (value.length >= 8) strength++;
+    if (/[A-Z]/.test(value)) strength++;
+    if (/[a-z]/.test(value)) strength++;
+    if (/[0-9]/.test(value)) strength++;
+    if (/[^A-Za-z0-9]/.test(value)) strength++;
+
+    passwordStrength.innerHTML = `Password Strength: ${['Weak', 'Moderate', 'Strong', 'Very Strong'][strength]}`;
+  });
+
+  const searchInput = document.getElementById('search');
+  const searchResults = document.getElementById('searchResults');
+  const sampleData = ['John Doe', 'Jane Smith', 'Alice Johnson', 'Robert Brown', 'Emily Davis'];
+
+  searchInput.addEventListener('input', function() {
+    const value = this.value.toLowerCase();
+    searchResults.innerHTML = '';
+    const filteredData = sampleData.filter(item => item.toLowerCase().includes(value));
+    filteredData.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      searchResults.appendChild(li);
+    });
+  });
+
+  function showStep(step) {
+    steps.forEach((element, index) => {
+      element.classList.toggle('active', index === step);
+    });
+    if (step === 0) {
+      document.getElementById('prevBtn').style.display = 'none';
+    } else {
+      document.getElementById('prevBtn').style.display = 'inline';
+    }
+    if (step === steps.length - 1) {
+      document.getElementById('nextBtn').style.display = 'none';
+    } else {
+      document.getElementById('nextBtn').style.display = 'inline';
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', function() {
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', function() {
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
+
+  showStep(currentStep);
+});
+</script>
+</body>
+</html>
