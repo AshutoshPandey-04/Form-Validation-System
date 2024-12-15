@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   
+    
     function showError(message) {
       output.innerHTML = `<p id="error">${message}</p>`;
     }
